@@ -1,0 +1,27 @@
+name: Build Android APK
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Construir el APK usando Buildozer en la carpeta android_version
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          workdir: android_version
+          command: buildozer android debug
+          buildozer_version: master
+
+      # Subir el APK resultante para descargarlo
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: TikTokBattle-APK
+          path: android_version/bin/*.apk
