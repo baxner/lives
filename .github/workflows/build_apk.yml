@@ -10,16 +10,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Construir el APK usando Buildozer en la carpeta android_version
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          workdir: android_version
-          command: buildozer android debug
-          buildozer_version: master
+          python-version: '3.11'
 
-      # Subir el APK resultante para descargarlo
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git python3-pip python3-dev python3-setuptools libffi-dev libssl-dev
+          sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+          sudo apt-get install -y openjdk-17-jdk unzip zip autoconf libtool pkg-config
+
+      - name: Install Buildozer
+        run: pip install --upgrade buildozer cython==0.29.36
+
+      - name: Build with Buildozer
+        working-directory: android_version
+        run: |
+          # Buildozer necesita confirmar licencias
+          yes | buildozer android debug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
