@@ -29,7 +29,7 @@ version = 1.0
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,pygame,numpy,TikTokLive,aiohttp,yarl,attrs,multidict,idna,certifi
+requirements = python3==3.10.13,pygame,numpy,TikTokLive,aiohttp,yarl,attrs,multidict,idna,certifi
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
