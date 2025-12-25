@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Construir el APK usando Buildozer en la carpeta android_version
       - name: Build with Buildozer
@@ -21,7 +21,7 @@ jobs:
 
       # Subir el APK resultante para descargarlo
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: TikTokBattle-APK
           path: android_version/bin/*.apk
