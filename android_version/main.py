@@ -83,18 +83,47 @@ async def game_loop():
         await asyncio.sleep(0.001)
 
 if __name__ == '__main__':
-    print(f"📱 Iniciando versión Android para: {TIKTOK_USER}")
-    
-    client = TikTokLiveClient(unique_id=TIKTOK_USER)
-    client.add_listener(GiftEvent, on_gift)
-    client.add_listener(ConnectEvent, on_connect)
-    client.add_listener(DisconnectEvent, on_disconnect)
-    client.add_listener(JoinEvent, on_join)
-    client.add_listener(LikeEvent, on_like)
-    
-    loop = asyncio.get_event_loop()
     try:
+        print(f"📱 Iniciando versión Android para: {TIKTOK_USER}")
+        
+        client = TikTokLiveClient(unique_id=TIKTOK_USER)
+        client.add_listener(GiftEvent, on_gift)
+        client.add_listener(ConnectEvent, on_connect)
+        client.add_listener(DisconnectEvent, on_disconnect)
+        client.add_listener(JoinEvent, on_join)
+        client.add_listener(LikeEvent, on_like)
+        
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
         future = asyncio.gather(client.start(), game_loop())
         loop.run_until_complete(future)
+        
     except Exception as e:
-        print(f"Error fatal: {e}")
+        # CRASH HANDLER VISUAL PARA ANDROID
+        import traceback
+        error_msg = traceback.format_exc()
+        print(error_msg)
+        
+        try:
+            pygame.init()
+            screen = pygame.display.set_mode((1080, 1920))
+            font = pygame.font.SysFont("monospace", 30)
+            
+            while True:
+                screen.fill((50, 0, 0))
+                
+                y = 50
+                for line in error_msg.split('\n'):
+                    txt = font.render(line, True, (255, 200, 200))
+                    screen.blit(txt, (20, y))
+                    y += 35
+                    
+                pygame.display.flip()
+                
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        exit()
+        except:
+            pass

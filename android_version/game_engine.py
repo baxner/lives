@@ -191,18 +191,27 @@ class GameState:
         self.winning_team = None
 
     def _load_assets(self):
-        def load(path, color):
+        # Base path relative to THIS file (game_engine.py)
+        import os
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        
+        def load(name, scale=1.0):
             try:
-                return pygame.image.load(path).convert_alpha()
-            except:
+                # Construct full path
+                full_path = os.path.join(base_path, "assets", name)
+                img = pygame.image.load(full_path).convert_alpha()
+                if scale != 1.0:
+                    new_size = (int(img.get_width() * scale), int(img.get_height() * scale))
+                    return pygame.transform.scale(img, new_size)
+                return img
+            except Exception as e:
+                print(f"Error loading {name}: {e}")
+                # Create fallback surface
                 s = pygame.Surface((50, 50))
-                s.fill(color)
+                s.fill((255, 0, 255)) # Magenta debug
                 return s
         
         # Paths relatives to where main.py runs
-        self.assets["RED"][1] = load("assets/red_soldier.png", RED_TEAM_COLOR)
-        self.assets["RED"][2] = load("assets/red_soldier_t2.png", RED_TEAM_COLOR)
-        self.assets["RED"][3] = load("assets/red_soldier_t3.png", RED_TEAM_COLOR)
         self.assets["RED"][4] = load("assets/red_soldier_t4.png", RED_TEAM_COLOR)
         
         self.assets["BLUE"][1] = load("assets/blue_soldier.png", BLUE_TEAM_COLOR)

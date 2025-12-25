@@ -57,7 +57,7 @@ android.permissions = INTERNET
 android.api = 33
 
 # (int) Minimum API your APK will support.
-android.minapi = 24
+android.minapi = 21
 
 # (int) Android SDK version to use
 android.sdk = 33
@@ -67,6 +67,9 @@ android.ndk = 25b
 
 # (bool) Automatically accept SDK license agreements
 android.accept_sdk_license = True
+
+# (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
+android.archs = arm64-v8a, armeabi-v7a
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
