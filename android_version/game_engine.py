@@ -189,6 +189,7 @@ class GameState:
         self.running = True
         self.victory_timer = 0
         self.winning_team = None
+        self.like_period_team = "RED" # Default team for likes
 
     def _load_assets(self):
         # Base path relative to THIS file (game_engine.py)
@@ -198,7 +199,8 @@ class GameState:
         def load(name, scale=1.0):
             try:
                 # Construct full path
-                full_path = os.path.join(base_path, "assets", name)
+                # Remove "assets" from join because name already includes it
+                full_path = os.path.join(base_path, name)
                 img = pygame.image.load(full_path).convert_alpha()
                 if scale != 1.0:
                     new_size = (int(img.get_width() * scale), int(img.get_height() * scale))
@@ -212,12 +214,16 @@ class GameState:
                 return s
         
         # Paths relatives to where main.py runs
-        self.assets["RED"][4] = load("assets/red_soldier_t4.png", RED_TEAM_COLOR)
+        self.assets["RED"][1] = load("assets/red_soldier.png")
+        self.assets["RED"][2] = load("assets/red_soldier_t2.png")
+        self.assets["RED"][3] = load("assets/red_soldier_t3.png")
+        # T4 missing in folder, use T3
+        self.assets["RED"][4] = load("assets/red_soldier_t3.png") 
         
-        self.assets["BLUE"][1] = load("assets/blue_soldier.png", BLUE_TEAM_COLOR)
-        self.assets["BLUE"][2] = load("assets/blue_soldier_t2.png", BLUE_TEAM_COLOR)
-        self.assets["BLUE"][3] = load("assets/blue_soldier_t3.png", BLUE_TEAM_COLOR)
-        self.assets["BLUE"][4] = load("assets/blue_soldier_t4.png", BLUE_TEAM_COLOR)
+        self.assets["BLUE"][1] = load("assets/blue_soldier.png")
+        self.assets["BLUE"][2] = load("assets/blue_soldier_t2.png")
+        self.assets["BLUE"][3] = load("assets/blue_soldier_t3.png")
+        self.assets["BLUE"][4] = load("assets/blue_soldier_t3.png")
 
     def spawn_soldier(self, team, username, points):
         if team == "RESET":

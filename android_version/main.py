@@ -21,7 +21,10 @@ if __name__ == '__main__':
         import pygame
         
         # 3. Importaciones diferidas para atrapar errores de dependencias
-        print(f"📱 Iniciando versión Android para: {TIKTOK_USER}")
+        print(f"📱 Iniciando versión Android para: {TIKTOK_USER}", flush=True)
+        # Flush stdout para forzar logs
+        sys.stdout.flush()
+        
         from TikTokLive import TikTokLiveClient
         from TikTokLive.events import GiftEvent, ConnectEvent, DisconnectEvent, JoinEvent, LikeEvent
         from game_engine import GameState
@@ -115,6 +118,9 @@ if __name__ == '__main__':
         error_msg = traceback.format_exc()
         print("❌ CRASH FATAL:")
         print(error_msg)
+        # Asegurar que salga en logcat como error
+        sys.stderr.write(f"CRASH FATAL:\n{error_msg}\n")
+        sys.stderr.flush()
         
         try:
             import pygame
